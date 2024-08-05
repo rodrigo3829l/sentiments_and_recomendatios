@@ -29,7 +29,7 @@ mdurl==0.1.2
 mlxtend==0.23.1
 namex==0.0.8
 nltk==3.8.1
-numpy<1.24,>=1.23.2
+numpy==1.26.4
 opt-einsum==3.3.0
 optree==0.12.1
 packaging==24.1
