@@ -11,7 +11,7 @@ Flask==3.0.3
 Flask-Cors==4.0.1
 flatbuffers==24.3.25
 fonttools==4.53.1
-gast==0.4.0  # Cambiado a una versión compatible con tensorflow 2.12.0
+gast==0.4.0
 google-pasta==0.2.0
 grpcio==1.65.1
 gunicorn==22.0.0
@@ -29,7 +29,7 @@ mdurl==0.1.2
 mlxtend==0.23.1
 namex==0.0.8
 nltk==3.8.1
-numpy==1.26.4
+numpy>=1.23.2,<1.24
 opt-einsum==3.3.0
 optree==0.12.1
 packaging==24.1
@@ -43,13 +43,12 @@ pytz==2024.1
 regex==2024.5.15
 requests==2.32.3
 rich==13.7.1
-scikit-learn==1.4.2  # Actualizado a una versión compatible con scikeras
-scipy==1.14.0
+scikit-learn==1.4.2
+scipy>=1.23.5,<2.0
 six==1.16.0
 tensorboard==2.17.0
 tensorboard-data-server==0.7.2
-tensorflow==2.12.0  # Cambiado a una versión compatible
-# tensorflow-intel eliminado
+tensorflow==2.12.0
 tensorflow-io-gcs-filesystem==0.31.0
 termcolor==2.4.0
 threadpoolctl==3.5.0
