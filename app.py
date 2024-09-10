@@ -41,10 +41,13 @@ def preprocess(text):
 MLP_model = joblib.load('MLP_model.pkl')
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
 rules = joblib.load('association_rules.pkl')
+satisfaction_model = joblib.load('satisfaction.pkl')
 
 # Crear la aplicación Flask
 app = Flask(__name__)
 CORS(app)  # Habilitar CORS para todas las rutas
+
+
 
 @app.route('/predict/comment', methods=['POST'])
 def predict_comment():
@@ -110,6 +113,39 @@ def predict_services():
     recomendaciones_para_u1 = recomendar_servicios(rules, unique_service_ids)
 
     return jsonify({'recommendations': recomendaciones_para_u1})
+
+
+# Nueva ruta para predecir el nivel de satisfacción
+@app.route('/predict/satisfaction', methods=['POST'])
+def predict_satisfaction():
+    try:
+        # Recibe los datos de las preguntas
+        data = request.get_json(force=True)
+        question1 = data.get('question1', None)
+        question2 = data.get('question2', None)
+        question3 = data.get('question3', None)
+
+        # Validar que todas las preguntas estén presentes
+        if question1 is None or question2 is None or question3 is None:
+            return jsonify({'error': 'Faltan respuestas de preguntas'}), 400
+
+        # Crear un DataFrame con los datos de las preguntas
+        X = pd.DataFrame([[question1, question2, question3]], columns=['Question 1', 'Question 2', 'Question 3'])
+
+        # Hacer la predicción con el modelo cargado
+        prediction = satisfaction_model.predict(X)[0]
+
+        # Convertir la predicción a un tipo de dato entero
+        prediction = int(prediction)
+
+        # Retornar la predicción de satisfacción (1-5)
+        return jsonify({'satisfaction_level': prediction})
+
+    except Exception as e:
+        print(f"Error al predecir la satisfacción: {e}")
+        return jsonify({'error': 'Error al procesar la predicción de satisfacción'}), 500
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
