@@ -2,6 +2,7 @@ import os
 import joblib
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask import make_response
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
@@ -45,7 +46,7 @@ satisfaction_model = joblib.load('satisfaction.pkl')
 
 # Crear la aplicación Flask
 app = Flask(__name__)
-CORS(app)  # Habilitar CORS para todas las rutas
+CORS(app, resources={r"/*": {"origins": "*"}}) 
 
 
 
@@ -114,7 +115,13 @@ def predict_services():
 
     return jsonify({'recommendations': recomendaciones_para_u1})
 
-
+@app.after_request
+def apply_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    response.headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS"
+    return response
+    
 # Nueva ruta para predecir el nivel de satisfacción
 @app.route('/predict/satisfaction', methods=['POST'])
 def predict_satisfaction():
